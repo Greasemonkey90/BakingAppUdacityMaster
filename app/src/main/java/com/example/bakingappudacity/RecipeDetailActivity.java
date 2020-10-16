@@ -1,78 +1,48 @@
 package com.example.bakingappudacity;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ArrayAdapter;
+
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class RecipeDetailActivity extends AppCompatActivity {
 
-    private RecipeApiService recipeApiService;
-    private List<Ingredient> ingredientList;
-    private List<Step> stepList;
+    public List<Ingredient> ingredientList;
+    public List<Step> stepList;
     private ListView theListView;
-    private Recipe currentRecipe;
-    private Ingredient currentIng;
-    private AdapterForRecipeDetail adapter;
+    public  Recipe currentRecipe;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ViewPageAdapter viewPageAdapter;
+    private TextView selectedTitle;
+    public static final String PASSING_RECIPE = "the recipe details";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ingredients_and_steps);
-        theListView = findViewById(R.id.ingAndStepsLV);
-        final RetrofitInstance retrofitInstance = new RetrofitInstance();
-        recipeApiService = retrofitInstance.getRetrofit().create(RecipeApiService.class);
-        currentRecipe = getIntent().getParcelableExtra("TESTING");
+        setContentView(R.layout.tab_layout);
+        theListView = findViewById(R.id.ingredients_LV);
+        tabLayout = findViewById(R.id.tab_layout);
+        viewPager = findViewById(R.id.view_pager);
+        selectedTitle = findViewById(R.id.selected_title);
+        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager());
+        viewPageAdapter.addFragment(new IngredientFragment(), "Ingredients");
+        viewPageAdapter.addFragment(new StepsFragment(), "Steps");
+        viewPager.setAdapter(viewPageAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+        currentRecipe = getIntent().getParcelableExtra(PASSING_RECIPE);
+        assert currentRecipe != null;
+        stepList = currentRecipe.recipeSteps;
         ingredientList = currentRecipe.recipeIngredients;
-        for(int i = 0; i<ingredientList.size();i++){
-            currentIng = ingredientList.get(i);
-            initAdapter(ingredientList);
-        }
-        //final Call<List<Ingredient>> responseCall = recipeApiService.getIngredients("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json");
-        //responseCall.enqueue(getResponseCallback());
+        selectedTitle.setText(currentRecipe.recipeName);
 
     }
-
-//    private Callback<List<Ingredient>> getResponseCallback() {
-//        return new Callback<List<Ingredient>>() {
-//
-//            @Override
-//            public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
-//                if (response.isSuccessful()) {
-//                    List<Ingredient> ingredients = response.body();
-//                    if (ingredients != null) {
-//                                initAdapter(ingredientList);
-//                        for (currentRecipe.recipeIngredients:
-//                             ) {
-//
-//                        }
-//                                Log.v("Ingredients ACT", "Ingredients response = " + response.body().toString());
-//                            }
-//
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure (Call < List < Ingredient >> call, Throwable t){
-//                    Log.v("MAIN ACTIVITY", "Retrofit error");
-//
-//                }
-//            };
-//        }
-
-        private void initAdapter (List < Ingredient > theIngList) {
-            //ingredientList = theIngList;
-            adapter = new AdapterForRecipeDetail(this,theIngList);
-            theListView.setAdapter(adapter);
-        }
-    }
-
+}

@@ -3,4 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="video_player_background">#87CEEB</color>
+    <color name="text_color">#F5FFFA</color>
+    <color name="background_color_ing">#87CEEB</color>
+    <color name="background_color_steps">#1E90FF</color>
 </resources>

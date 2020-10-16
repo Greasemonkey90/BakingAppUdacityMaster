@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BakingAppUdacity</string>
+    <string name="no_recipes_found">Please select a recipe to continue</string>
+    <string name="next_button">Next</string>
+    <string name="prev_button">Previous</string>
+    <string name="no_video">NO VIDEO AVAILABLE</string>
+    <string name="no_internet">Please check internet connection and restart app</string>
 </resources>

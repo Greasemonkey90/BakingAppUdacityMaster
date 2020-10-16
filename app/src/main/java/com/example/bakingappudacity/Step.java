@@ -1,8 +1,14 @@
 package com.example.bakingappudacity;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.gson.annotations.SerializedName;
 
 public class Step implements Parcelable {
@@ -21,6 +27,19 @@ public class Step implements Parcelable {
 
     @SerializedName("thumbnailURL")
     public String thumbnailUrl;
+
+    private MediaSource mediaSource;
+
+    public MediaSource getMediaSource(Context context) {
+        if(mediaSource == null){
+            String userAgent = Util.getUserAgent(context, "BakingAppUdacity");
+            DefaultDataSourceFactory defaultDataSourceFactory = new DefaultDataSourceFactory(context,userAgent);
+           mediaSource = new ExtractorMediaSource.Factory(defaultDataSourceFactory).createMediaSource(
+                    Uri.parse(videoUrl));
+            //mediaSource = mediaSource1;
+        }
+        return mediaSource;
+    }
 
 
     @Override
